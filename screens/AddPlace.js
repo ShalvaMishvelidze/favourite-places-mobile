@@ -3,11 +3,7 @@ import React from 'react';
 import PlaceForm from '../components/places/PlaceForm';
 
 const AddPlace = () => {
-  return (
-    <View>
-      <PlaceForm />
-    </View>
-  );
+  return <PlaceForm />;
 };
 
 export default AddPlace;
