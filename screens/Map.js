@@ -36,8 +36,8 @@ const Map = ({ navigation }) => {
   return (
     <MapView
       initialRegion={{
-        latitude: 37.78,
-        longitude: -122.43,
+        latitude: 41.716667,
+        longitude: 44.783333,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
