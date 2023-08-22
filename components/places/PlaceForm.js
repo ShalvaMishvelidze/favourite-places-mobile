@@ -3,13 +3,17 @@ import React, { useState } from 'react';
 import { colors } from '../../constants/colors';
 import ImagePicker from './ImagePicker';
 import LocationPicker from './LocationPicker';
+import Btn from '../UI/Btn';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTitle } from '../../features/singlePlace/singlePlaceSlice';
 
 const PlaceForm = () => {
-  const [enteredTitle, setEnteredTitle] = useState('');
+  const { title } = useSelector((state) => state.singlePlace);
+  const dispatch = useDispatch();
 
-  function handleChange(value) {
-    setEnteredTitle(value);
-  }
+  function savePlaceHandler(params) {}
+  function takeImageHandler(params) {}
+  function pickLocationHandler() {}
 
   return (
     <ScrollView style={styles.form}>
@@ -17,12 +21,13 @@ const PlaceForm = () => {
         <Text style={styles.label}>Title</Text>
         <TextInput
           style={styles.input}
-          onChangeText={(value) => handleChange(value)}
-          value={enteredTitle}
+          onChangeText={(value) => dispatch(setTitle(value))}
+          value={title}
         />
       </View>
-      <ImagePicker />
-      <LocationPicker />
+      <ImagePicker onTakeImage={takeImageHandler} />
+      <LocationPicker onPickLocation={pickLocationHandler} />
+      <Btn onPress={savePlaceHandler}>Add Place</Btn>
     </ScrollView>
   );
 };

@@ -6,12 +6,14 @@ import AddPlace from './screens/AddPlace';
 import IconButton from './components/UI/IconButton';
 import { colors } from './constants/colors';
 import Map from './screens/Map';
+import { store } from './store';
+import { Provider } from 'react-redux';
 
 const stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <>
+    <Provider store={store}>
       <StatusBar style="dark" />
       <NavigationContainer>
         <stack.Navigator
@@ -50,6 +52,6 @@ export default function App() {
           <stack.Screen name="Map" component={Map} />
         </stack.Navigator>
       </NavigationContainer>
-    </>
+    </Provider>
   );
 }
