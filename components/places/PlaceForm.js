@@ -1,19 +1,29 @@
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { colors } from '../../constants/colors';
 import ImagePicker from './ImagePicker';
 import LocationPicker from './LocationPicker';
 import Btn from '../UI/Btn';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTitle } from '../../features/singlePlace/singlePlaceSlice';
+import {
+  setTitle,
+  setImageUri,
+  setLocation,
+} from '../../features/singlePlace/singlePlaceSlice';
 
 const PlaceForm = () => {
-  const { title } = useSelector((state) => state.singlePlace);
+  const state = useSelector((state) => state.singlePlace);
   const dispatch = useDispatch();
 
-  function savePlaceHandler(params) {}
-  function takeImageHandler(params) {}
-  function pickLocationHandler() {}
+  function takeImageHandler(imageUri) {
+    dispatch(setImageUri(imageUri));
+  }
+  const pickLocationHandler = useCallback((location) => {
+    dispatch(setLocation(location));
+  }, []);
+  function savePlaceHandler() {
+    console.log(state);
+  }
 
   return (
     <ScrollView style={styles.form}>
@@ -22,7 +32,7 @@ const PlaceForm = () => {
         <TextInput
           style={styles.input}
           onChangeText={(value) => dispatch(setTitle(value))}
-          value={title}
+          value={state.title}
         />
       </View>
       <ImagePicker onTakeImage={takeImageHandler} />

@@ -14,7 +14,7 @@ import {
   useIsFocused,
 } from '@react-navigation/native';
 
-const LocationPicker = () => {
+const LocationPicker = ({ onPickLocation }) => {
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
 
@@ -34,6 +34,10 @@ const LocationPicker = () => {
       setLocation(mapPickedLocation);
     }
   }, [params, isFocused]);
+
+  useEffect(() => {
+    onPickLocation(location);
+  }, [location, onPickLocation]);
 
   async function verifyPermissions() {
     if (

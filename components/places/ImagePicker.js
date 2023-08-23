@@ -8,7 +8,7 @@ import {
 import { colors } from '../../constants/colors';
 import BtnOutlined from '../UI/BtnOutlined';
 
-const ImagePicker = () => {
+const ImagePicker = ({ onTakeImage }) => {
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
   const [image, setImage] = useState('');
@@ -42,6 +42,7 @@ const ImagePicker = () => {
       quality: 0.5,
     });
     setImage(image.assets[0].uri);
+    onTakeImage(image.assets[0].uri);
   }
 
   return (
