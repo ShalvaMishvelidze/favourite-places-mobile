@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { colors } from '../../constants/colors';
 import ImagePicker from './ImagePicker';
 import LocationPicker from './LocationPicker';
@@ -9,20 +9,32 @@ import {
   setTitle,
   setImageUri,
   setLocation,
+  setAddress,
+  resetState,
 } from '../../features/singlePlace/singlePlaceSlice';
+import { addPlace } from '../../features/allPlaces/allPlacesSlice';
+import { useNavigation } from '@react-navigation/native';
 
 const PlaceForm = () => {
   const state = useSelector((state) => state.singlePlace);
+  const [reRender, setReRender] = useState(false);
   const dispatch = useDispatch();
+  const { navigate } = useNavigation();
 
   function takeImageHandler(imageUri) {
     dispatch(setImageUri(imageUri));
   }
-  const pickLocationHandler = useCallback((location) => {
+
+  const pickLocationHandler = useCallback((location, address) => {
     dispatch(setLocation(location));
+    dispatch(setAddress(address));
   }, []);
+
   function savePlaceHandler() {
-    console.log(state);
+    dispatch(addPlace(state));
+    dispatch(resetState());
+    setReRender(!reRender);
+    navigate('AllPlaces');
   }
 
   return (
@@ -36,6 +48,7 @@ const PlaceForm = () => {
         />
       </View>
       <ImagePicker onTakeImage={takeImageHandler} />
+      {state.address && <Text style={styles.address}>{state.address}</Text>}
       <LocationPicker onPickLocation={pickLocationHandler} />
       <Btn onPress={savePlaceHandler}>Add Place</Btn>
     </ScrollView>
@@ -62,5 +75,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 2,
     borderBottomColor: colors.primary700,
+  },
+  address: {
+    margin: 16,
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
