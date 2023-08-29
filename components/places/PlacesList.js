@@ -2,8 +2,10 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import PlacesListItem from './PlacesListItem';
 import { colors } from '../../constants/colors';
+import { useSelector } from 'react-redux';
 
-const PlacesList = ({ places }) => {
+const PlacesList = () => {
+  const { places } = useSelector((state) => state.allPlaces);
   if (!places || places.length === 0) {
     return (
       <View style={styles.fallbackContainer}>
@@ -15,6 +17,7 @@ const PlacesList = ({ places }) => {
   }
   return (
     <FlatList
+      style={styles.list}
       data={places}
       renderItem={({ item }) => <PlacesListItem {...item} />}
       keyExtractor={(item) => item.id}
@@ -33,5 +36,8 @@ const styles = StyleSheet.create({
   fallbackText: {
     fontSize: 16,
     color: colors.primary200,
+  },
+  list: {
+    margin: 24,
   },
 });
