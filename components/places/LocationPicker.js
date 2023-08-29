@@ -7,7 +7,7 @@ import {
   getCurrentPositionAsync,
   useForegroundPermissions,
 } from 'expo-location';
-import { getMapPreview } from '../../utils/location';
+import { getAddress, getMapPreview } from '../../utils/location';
 import {
   useNavigation,
   useRoute,
@@ -36,7 +36,11 @@ const LocationPicker = ({ onPickLocation }) => {
   }, [params, isFocused]);
 
   useEffect(() => {
-    onPickLocation(location);
+    if (location) {
+      getAddress(location.lat, location.lng).then((address) =>
+        onPickLocation(location, address)
+      );
+    }
   }, [location, onPickLocation]);
 
   async function verifyPermissions() {
