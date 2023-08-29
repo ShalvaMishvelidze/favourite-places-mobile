@@ -8,10 +8,27 @@ import { colors } from './constants/colors';
 import Map from './screens/Map';
 import { store } from './store';
 import { Provider } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { init } from './utils/database';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 const stack = createNativeStackNavigator();
 
 export default function App() {
+  const [dbIitialized, setDbInitialized] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => setDbInitialized(true))
+      .catch((err) => console.log(err));
+  }, []);
+
+  if (dbIitialized) {
+    SplashScreen.hideAsync();
+  }
+
   return (
     <Provider store={store}>
       <StatusBar style="dark" />
