@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { colors } from '../../constants/colors';
 import ImagePicker from './ImagePicker';
 import LocationPicker from './LocationPicker';
@@ -17,7 +17,6 @@ import { useNavigation } from '@react-navigation/native';
 
 const PlaceForm = () => {
   const state = useSelector((state) => state.singlePlace);
-  const [reRender, setReRender] = useState(false);
   const dispatch = useDispatch();
   const { navigate } = useNavigation();
 
@@ -31,9 +30,8 @@ const PlaceForm = () => {
   }, []);
 
   function savePlaceHandler() {
-    dispatch(addPlace(state));
+    dispatch(addPlace());
     dispatch(resetState());
-    setReRender(!reRender);
     navigate('AllPlaces');
   }
 

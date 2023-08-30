@@ -2,13 +2,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { colors } from '../../constants/colors';
 
-const PlacesListItem = ({
-  title,
-  imageUri: uri,
-  address,
-  location,
-  onPress,
-}) => {
+const PlacesListItem = ({ title, imageUri: uri, address, onPress }) => {
   return (
     <Pressable
       onPress={onPress}
