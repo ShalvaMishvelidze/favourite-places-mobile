@@ -3,9 +3,16 @@ import React from 'react';
 import PlacesListItem from './PlacesListItem';
 import { colors } from '../../constants/colors';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const PlacesList = () => {
   const { places } = useSelector((state) => state.allPlaces);
+  const { navigate } = useNavigation();
+
+  const selectedPlaceHandler = (id) => {
+    navigate('PlaceDetails', { id });
+  };
+
   if (!places || places.length === 0) {
     return (
       <View style={styles.fallbackContainer}>
@@ -19,7 +26,9 @@ const PlacesList = () => {
     <FlatList
       style={styles.list}
       data={places}
-      renderItem={({ item }) => <PlacesListItem {...item} />}
+      renderItem={({ item }) => (
+        <PlacesListItem onPress={selectedPlaceHandler} {...item} />
+      )}
       keyExtractor={(item) => item.id}
     />
   );

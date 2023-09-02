@@ -2,10 +2,10 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { colors } from '../../constants/colors';
 
-const PlacesListItem = ({ title, imageUri: uri, address, onPress }) => {
+const PlacesListItem = ({ id, title, imageUri: uri, address, onPress }) => {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={onPress.bind(this, id)}
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
     >
       <Image

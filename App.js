@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { init } from './utils/database';
 import * as SplashScreen from 'expo-splash-screen';
+import PlaceDetails from './screens/PlaceDetails';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -64,6 +65,13 @@ export default function App() {
             component={AddPlace}
             options={{
               title: 'Add a New Place',
+            }}
+          />
+          <stack.Screen
+            name="PlaceDetails"
+            component={PlaceDetails}
+            options={{
+              title: 'Details',
             }}
           />
           <stack.Screen name="Map" component={Map} />
