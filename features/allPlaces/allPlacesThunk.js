@@ -1,4 +1,8 @@
-import { fetchPlaces, insertPlace } from '../../utils/database';
+import {
+  fetchPlaceDetails,
+  fetchPlaces,
+  insertPlace,
+} from '../../utils/database';
 
 export const addPlaceThunk = async (_, thunkAPI) => {
   try {
@@ -12,7 +16,15 @@ export const addPlaceThunk = async (_, thunkAPI) => {
 export const getPlacesThunk = async (_, thunkAPI) => {
   try {
     const response = await fetchPlaces();
-    console.log(response);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const setSelectedPlaceThunk = async ({ id }, thunkAPI) => {
+  try {
+    const response = await fetchPlaceDetails({ id });
     return response;
   } catch (error) {
     return error;

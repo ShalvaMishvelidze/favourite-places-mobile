@@ -1,15 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addPlaceThunk, getPlacesThunk } from './allPlacesThunk';
+import {
+  addPlaceThunk,
+  getPlacesThunk,
+  setSelectedPlaceThunk,
+} from './allPlacesThunk';
 
 const initialState = {
   places: [],
   isLoading: false,
   error: '',
   addedNewPlace: false,
+  selectedPlace: null,
 };
 
 export const addPlace = createAsyncThunk('addPlace', addPlaceThunk);
 export const getPlaces = createAsyncThunk('getPlaces', getPlacesThunk);
+export const setSelectedPlace = createAsyncThunk(
+  'setSelectedPlace',
+  setSelectedPlaceThunk
+);
 
 const allPlacesSlice = createSlice({
   name: 'allPlaces',
@@ -39,6 +48,17 @@ const allPlacesSlice = createSlice({
       .addCase(getPlaces.rejected, (state, { payload }) => {
         state.error = payload;
         state.addedNewPlace = false;
+        state.isLoading = false;
+      })
+      .addCase(setSelectedPlace.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(setSelectedPlace.fulfilled, (state, { payload }) => {
+        state.selectedPlace = payload;
+        state.isLoading = false;
+      })
+      .addCase(setSelectedPlace.rejected, (state, { payload }) => {
+        state.error = payload;
         state.isLoading = false;
       });
   },
