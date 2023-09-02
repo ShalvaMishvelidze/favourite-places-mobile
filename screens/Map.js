@@ -3,8 +3,13 @@ import React, { useCallback, useLayoutEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import IconButton from '../components/UI/IconButton';
 
-const Map = ({ navigation }) => {
-  const [selectedLocation, setSelectedLocation] = useState(null);
+const Map = ({ navigation, route }) => {
+  const initialLocation = route.params && {
+    lat: route.params.initialLat,
+    lng: route.params.initialLng,
+  };
+
+  const [selectedLocation, setSelectedLocation] = useState(initialLocation);
 
   const savePickedLocationHandler = useCallback(() => {
     if (!selectedLocation) {
@@ -19,25 +24,26 @@ const Map = ({ navigation }) => {
   }, [navigation, selectedLocation]);
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: ({ tintColor }) => {
-        return (
-          <IconButton
-            icon={'save'}
-            size={24}
-            color={tintColor}
-            onPress={savePickedLocationHandler}
-          />
-        );
-      },
-    });
-  }, [navigation, savePickedLocationHandler]);
+    initialLocation ||
+      navigation.setOptions({
+        headerRight: ({ tintColor }) => {
+          return (
+            <IconButton
+              icon={'save'}
+              size={24}
+              color={tintColor}
+              onPress={savePickedLocationHandler}
+            />
+          );
+        },
+      });
+  }, [navigation, savePickedLocationHandler, initialLocation]);
 
   return (
     <MapView
       initialRegion={{
-        latitude: 41.716667,
-        longitude: 44.783333,
+        latitude: initialLocation ? initialLocation.lat : 41.716667,
+        longitude: initialLocation ? initialLocation.lng : 44.783333,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
@@ -45,6 +51,9 @@ const Map = ({ navigation }) => {
       onPress={({ nativeEvent }) => {
         const lat = nativeEvent.coordinate.latitude;
         const lng = nativeEvent.coordinate.longitude;
+        if (initialLocation) {
+          return;
+        }
         setSelectedLocation({ lat, lng });
       }}
     >

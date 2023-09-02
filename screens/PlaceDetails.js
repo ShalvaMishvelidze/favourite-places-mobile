@@ -6,9 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedPlace } from '../features/allPlaces/allPlacesSlice';
 import * as SplashScreen from 'expo-splash-screen';
 
-const PlaceDetails = ({ route }) => {
+const PlaceDetails = ({ route, navigation }) => {
   const { selectedPlace, isLoading } = useSelector((state) => state.allPlaces);
-  function showOnMapHandler() {}
+  function showOnMapHandler() {
+    navigation.navigate('Map', {
+      initialLat: selectedPlace.lat,
+      initialLng: selectedPlace.lng,
+    });
+  }
 
   const dispatch = useDispatch();
 
