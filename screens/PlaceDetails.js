@@ -4,14 +4,22 @@ import BtnOutlined from '../components/UI/BtnOutlined';
 import { colors } from '../constants/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedPlace } from '../features/allPlaces/allPlacesSlice';
+import * as SplashScreen from 'expo-splash-screen';
 
 const PlaceDetails = ({ route }) => {
-  const { selectedPlace } = useSelector((state) => state.allPlaces);
+  const { selectedPlace, isLoading } = useSelector((state) => state.allPlaces);
   function showOnMapHandler() {}
 
   const dispatch = useDispatch();
 
   const selectedPlaceId = route.params.id;
+  useEffect(() => {
+    if (isLoading) {
+      SplashScreen.preventAutoHideAsync();
+    } else {
+      SplashScreen.hideAsync();
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     dispatch(setSelectedPlace({ id: selectedPlaceId }));
@@ -19,15 +27,22 @@ const PlaceDetails = ({ route }) => {
 
   return (
     <ScrollView>
-      <Image style={styles.image} source={{ uri: selectedPlace.imageUri }} />
-      <View style={styles.locationContainer}>
-        <View style={styles.addressContainer}>
-          <Text style={styles.address}>{selectedPlace.address}</Text>
-        </View>
-        <BtnOutlined icon={'map'} onPress={showOnMapHandler}>
-          View on Map
-        </BtnOutlined>
-      </View>
+      {selectedPlace && (
+        <>
+          <Image
+            style={styles.image}
+            source={{ uri: selectedPlace.imageUri }}
+          />
+          <View style={styles.locationContainer}>
+            <View style={styles.addressContainer}>
+              <Text style={styles.address}>{selectedPlace.address}</Text>
+            </View>
+            <BtnOutlined icon={'map'} onPress={showOnMapHandler}>
+              View on Map
+            </BtnOutlined>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };
