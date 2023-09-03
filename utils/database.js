@@ -86,3 +86,48 @@ export function fetchPlaceDetails({ id }) {
   });
   return promise;
 }
+
+export function deletePlace(id) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM places WHERE id = ?`,
+        [id],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function updatePlace(updatedPlace) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE places SET title = ?, imageUri = ?, address = ?, lat = ?, lng = ? WHERE id = ?`,
+        [
+          updatedPlace.title,
+          updatedPlace.imageUri,
+          updatedPlace.address,
+          updatedPlace.lat,
+          updatedPlace.lng,
+          updatedPlace.id,
+        ],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}

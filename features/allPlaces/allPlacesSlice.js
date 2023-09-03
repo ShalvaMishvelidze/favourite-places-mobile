@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   addPlaceThunk,
+  deleteSelectedPlaceThunk,
+  editSelectedPlaceThunk,
   getPlacesThunk,
   setSelectedPlaceThunk,
 } from './allPlacesThunk';
@@ -11,6 +13,7 @@ const initialState = {
   error: '',
   addedNewPlace: false,
   selectedPlace: null,
+  editing: false,
 };
 
 export const addPlace = createAsyncThunk('addPlace', addPlaceThunk);
@@ -19,11 +22,23 @@ export const setSelectedPlace = createAsyncThunk(
   'setSelectedPlace',
   setSelectedPlaceThunk
 );
+export const deleteSelectedPlace = createAsyncThunk(
+  'deleteSelectedPlace',
+  deleteSelectedPlaceThunk
+);
+export const editSelectedPlace = createAsyncThunk(
+  'editSelectedPlace',
+  editSelectedPlaceThunk
+);
 
 const allPlacesSlice = createSlice({
   name: 'allPlaces',
   initialState,
-  reducers: {},
+  reducers: {
+    setEditing: (state) => {
+      state.editing = !state.editing;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addPlace.pending, (state) => {
@@ -60,8 +75,30 @@ const allPlacesSlice = createSlice({
       .addCase(setSelectedPlace.rejected, (state, { payload }) => {
         state.error = payload;
         state.isLoading = false;
+      })
+      .addCase(deleteSelectedPlace.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteSelectedPlace.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteSelectedPlace.rejected, (state, { payload }) => {
+        state.error = payload;
+        state.isLoading = false;
+      })
+      .addCase(editSelectedPlace.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editSelectedPlace.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(editSelectedPlace.rejected, (state, { payload }) => {
+        state.error = payload;
+        state.isLoading = false;
       });
   },
 });
 
 export default allPlacesSlice.reducer;
+
+export const { setEditing } = allPlacesSlice.actions;

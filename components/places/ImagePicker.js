@@ -8,7 +8,7 @@ import {
 import { colors } from '../../constants/colors';
 import BtnOutlined from '../UI/BtnOutlined';
 
-const ImagePicker = ({ onTakeImage }) => {
+const ImagePicker = ({ onTakeImage, editImageUri = '' }) => {
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
   const [image, setImage] = useState('');
@@ -48,7 +48,10 @@ const ImagePicker = ({ onTakeImage }) => {
   return (
     <View>
       <View style={styles.imageContainer}>
-        {!image && <Text>No image added yet!</Text>}
+        {!image && !editImageUri && <Text>No image added yet!</Text>}
+        {!image && editImageUri && (
+          <Image source={{ uri: editImageUri }} style={styles.image} />
+        )}
         {image && <Image source={{ uri: image }} style={styles.image} />}
       </View>
       <BtnOutlined onPress={takeImageHandler} icon={'camera'}>

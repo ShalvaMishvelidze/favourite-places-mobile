@@ -2,8 +2,10 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import IconButton from '../components/UI/IconButton';
+import { useSelector } from 'react-redux';
 
 const Map = ({ navigation, route }) => {
+  const { editing } = useSelector((state) => state.allPlaces);
   const initialLocation = route.params && {
     lat: route.params.initialLat,
     lng: route.params.initialLng,
@@ -20,7 +22,9 @@ const Map = ({ navigation, route }) => {
       return;
     }
 
-    navigation.navigate('AddPlace', { ...selectedLocation });
+    editing
+      ? navigation.navigate('Edit', { ...selectedLocation })
+      : navigation.navigate('AddPlace', { ...selectedLocation });
   }, [navigation, selectedLocation]);
 
   useLayoutEffect(() => {

@@ -14,7 +14,7 @@ import {
   useIsFocused,
 } from '@react-navigation/native';
 
-const LocationPicker = ({ onPickLocation }) => {
+const LocationPicker = ({ onPickLocation, isEditing = false }) => {
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
 

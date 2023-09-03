@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { init } from './utils/database';
 import * as SplashScreen from 'expo-splash-screen';
 import PlaceDetails from './screens/PlaceDetails';
+import Edit from './screens/Edit';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -72,6 +73,13 @@ export default function App() {
             component={PlaceDetails}
             options={{
               title: 'Details',
+            }}
+          />
+          <stack.Screen
+            name="Edit"
+            component={Edit}
+            options={{
+              title: 'Edit',
             }}
           />
           <stack.Screen name="Map" component={Map} />

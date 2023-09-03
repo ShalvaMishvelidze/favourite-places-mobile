@@ -3,8 +3,14 @@ import React, { useEffect } from 'react';
 import BtnOutlined from '../components/UI/BtnOutlined';
 import { colors } from '../constants/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedPlace } from '../features/allPlaces/allPlacesSlice';
+import {
+  deleteSelectedPlace,
+  getPlaces,
+  setSelectedPlace,
+} from '../features/allPlaces/allPlacesSlice';
 import * as SplashScreen from 'expo-splash-screen';
+import { useLayoutEffect } from 'react';
+import IconButton from '../components/UI/IconButton';
 
 const PlaceDetails = ({ route, navigation }) => {
   const { selectedPlace, isLoading } = useSelector((state) => state.allPlaces);
@@ -18,6 +24,36 @@ const PlaceDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const selectedPlaceId = route.params.id;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: ({ tintColor }) => {
+        return (
+          <View style={styles.btnContainer}>
+            <IconButton
+              icon={'pencil'}
+              size={24}
+              color={tintColor}
+              onPress={() => {
+                navigation.navigate('Edit', { ...selectedPlace });
+              }}
+            />
+            <IconButton
+              icon={'trash'}
+              size={24}
+              color={tintColor}
+              onPress={() => {
+                dispatch(deleteSelectedPlace(selectedPlaceId));
+                dispatch(getPlaces());
+                navigation.goBack();
+              }}
+            />
+          </View>
+        );
+      },
+    });
+  }, [navigation, selectedPlace]);
+
   useEffect(() => {
     if (isLoading) {
       SplashScreen.preventAutoHideAsync();
@@ -28,7 +64,7 @@ const PlaceDetails = ({ route, navigation }) => {
 
   useEffect(() => {
     dispatch(setSelectedPlace({ id: selectedPlaceId }));
-  }, [selectedPlaceId]);
+  }, [selectedPlaceId, route.params]);
 
   return (
     <ScrollView>
@@ -66,6 +102,9 @@ const styles = StyleSheet.create({
   },
   addressContainer: {
     padding: 20,
+  },
+  btnContainer: {
+    flexDirection: 'row',
   },
   address: {
     color: colors.primary500,
