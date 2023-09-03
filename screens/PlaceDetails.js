@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import BtnOutlined from '../components/UI/BtnOutlined';
 import { colors } from '../constants/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,9 +11,13 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 import { useLayoutEffect } from 'react';
 import IconButton from '../components/UI/IconButton';
+import { getMapLink } from '../utils/location';
+import { Linking } from 'react-native';
 
 const PlaceDetails = ({ route, navigation }) => {
   const { selectedPlace, isLoading } = useSelector((state) => state.allPlaces);
+  const [url, setUrl] = useState('');
+
   function showOnMapHandler() {
     navigation.navigate('Map', {
       initialLat: selectedPlace.lat,
@@ -24,6 +28,12 @@ const PlaceDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const selectedPlaceId = route.params.id;
+
+  useEffect(() => {
+    if (selectedPlace) {
+      setUrl(getMapLink(selectedPlace.lat, selectedPlace.lng));
+    }
+  }, [selectedPlace]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -78,9 +88,27 @@ const PlaceDetails = ({ route, navigation }) => {
             <View style={styles.addressContainer}>
               <Text style={styles.address}>{selectedPlace.address}</Text>
             </View>
-            <BtnOutlined icon={'map'} onPress={showOnMapHandler}>
-              View on Map
-            </BtnOutlined>
+            <View style={styles.btnContainer}>
+              <BtnOutlined icon={'map'} onPress={showOnMapHandler}>
+                View on Map
+              </BtnOutlined>
+              <BtnOutlined
+                icon={'location'}
+                onPress={() =>
+                  Linking.openURL(url)
+                    .then((supported) => {
+                      if (!supported) {
+                        console.error('Unable to open url!');
+                      }
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                    })
+                }
+              >
+                Directions
+              </BtnOutlined>
+            </View>
           </View>
         </>
       )}

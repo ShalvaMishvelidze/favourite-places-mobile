@@ -15,3 +15,7 @@ export async function getAddress(lat, lng) {
 
   return data.results[0].formatted_address;
 }
+
+export const getMapLink = (lat, lng) => {
+  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+};
