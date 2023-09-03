@@ -37,6 +37,7 @@ const Edit = ({ route, navigation }) => {
   function savePlaceHandler() {
     dispatch(editSelectedPlace(state));
     dispatch(getPlaces());
+    dispatch(setEditing());
     navigate('PlaceDetails', { ...state });
   }
 
